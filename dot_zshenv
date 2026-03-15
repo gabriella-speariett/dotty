@@ -1,3 +1,4 @@
 export ZDOTDIR=$HOME/configuration/terminal
 export XDG_CONFIG_HOME=$HOME/configuration
 export NVIM_APPNAME=terminal/nvim
+export EDITOR=nvim
