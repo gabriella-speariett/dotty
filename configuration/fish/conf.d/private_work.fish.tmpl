@@ -1,0 +1,17 @@
+{{- if .work -}}
+if status --is-interactive
+    set -x SUADE_DEBUG 1
+
+    alias send_it='cd ~/Documents/Suade_System/usefulscripts && source .venv/bin/activate && uploader'
+    alias vpn='tailscale up --accept-routes --login-server=https://headscale.suadelabs.com --operator=gabriella'
+    alias logs='journalctl -afu docker | ccze -m ansi'
+
+    alias db_tables='docker run -it --rm --network suade mirror.gcr.io/pygmy/pgcli:latest postgres://postgres@database13:5432/postgres'
+    alias db_version="docker exec -itu postgres database13 psql -c 'select * from alembic_version'"
+    alias db_upgrade='docker exec -it apigateway pypy3 manage.py db upgrade'
+
+    function db_downgrade
+        docker exec -it apigateway pypy3 manage.py db downgrade $argv[1]
+    end
+end
+{{- end -}}
