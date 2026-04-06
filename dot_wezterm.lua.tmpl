@@ -2,4 +2,8 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
+config.set_environment_variables = {
+	XDG_CONFIG_HOME = "{{ .home_root }}/configuration",
+}
+
 return config
