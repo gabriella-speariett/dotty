@@ -5,5 +5,8 @@ local config = wezterm.config_builder()
 config.set_environment_variables = {
 	XDG_CONFIG_HOME = "{{ .home_root }}/configuration",
 }
+config.font = wezterm.font("Terminess Nerd Font Mono")
+config.font_size = 14.0
+
 
 return config
