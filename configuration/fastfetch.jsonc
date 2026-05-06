@@ -17,8 +17,14 @@
         "cpu",
         "memory",
         "wifi",
-        "mouse",
-        "keyboard",
+        {
+            "type": "mouse",
+            "count": 1
+        },
+        {
+            "type": "keyboard",
+            "count": 1
+        },
         "media",
         "break",
         {
