@@ -18,12 +18,14 @@
         "memory",
         "wifi",
         {
-            "type": "mouse",
-            "count": 1
+            "type": "command",
+            "key": "Mouse",
+            "text": "fastfetch -s mouse --format json | jq -r '.[0].result[0].name'"
         },
         {
-            "type": "keyboard",
-            "count": 1
+            "type": "command",
+            "key": "Keyboard",
+            "text": "fastfetch -s keyboard --format json | jq -r '.[0].result[0].name'"
         },
         "media",
         "break",
