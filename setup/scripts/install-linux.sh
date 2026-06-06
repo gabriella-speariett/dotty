@@ -45,7 +45,8 @@ log_info "==> Installing Python and Go (if not already installed)..."
 sudo apt install -y -qq python3 golang-go
 
 # ── WezTerm ───────────────────────────────────────────────────────────────────
-if ! is_installed wezterm; then
+# Skip on headless/SSH systems (wezterm is a terminal emulator, not useful when running remote)
+if [[ -z "${SSH_CONNECTION:-}" ]] && ! is_installed wezterm; then
     log_info "==> Installing WezTerm..."
     curl -fsSL https://apt.fury.io/wezfurlong/gpg.key \
         | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
@@ -55,6 +56,8 @@ if ! is_installed wezterm; then
     sudo apt update -qq
     sudo apt install -y -qq wezterm
     log_install_result "WezTerm"
+elif [[ -n "${SSH_CONNECTION:-}" ]]; then
+    log_info "==> Skipping WezTerm (SSH/headless environment detected)"
 fi
 
 apt_install() {
