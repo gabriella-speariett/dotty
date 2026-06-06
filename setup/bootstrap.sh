@@ -63,6 +63,23 @@ fi
 echo "==> Applying dotfiles..."
 chezmoi init --apply "$REPO"
 
+# ── XDG Config Home ───────────────────────────────────────────────────────────
+# Set XDG_CONFIG_HOME to ~/configuration so all shells find config properly,
+# especially important for SSH/headless systems without wezterm
+cat > "$HOME/.profile" << 'EOF'
+export XDG_CONFIG_HOME="$HOME/configuration"
+EOF
+
+# Also set in fish config so it's available for non wezterm fish shells
+mkdir -p "$HOME/.config/fish"
+cat > "$HOME/.config/fish/config.fish" << 'EOF'
+set -gx XDG_CONFIG_HOME "$HOME/configuration"
+
+for file in $HOME/configuration/fish/**/*.fish
+    source $file
+end
+EOF
+
 # ── just ──────────────────────────────────────────────────────────────────────
 if ! command -v just &>/dev/null; then
     echo "==> Installing just..."
