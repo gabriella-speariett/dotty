@@ -110,7 +110,31 @@ for package in direnv zoxide tree ripgrep fd-find fzf bat lsd lazygit fastfetch;
 done
 
 apt_install_with_repo "fish" "ppa:fish-shell/release-4"
-apt_install_with_repo "neovim" "ppa:neovim-ppa/stable"
+
+install_neovim() {
+    if is_installed nvim; then
+        log_info "==> nvim already installed, skipping..."
+        return
+    fi
+
+    log_info "==> Installing neovim from GitHub releases..."
+    local arch
+    case "$ARCH" in
+        arm64|aarch64) arch="arm64" ;;
+        *) arch="x86_64" ;;
+    esac
+
+    local url
+    url=$(github_latest_url "neovim/neovim" "nvim-linux-${arch}.tar.gz")
+
+    local install_dir="$HOME/.local/share/nvim-release"
+    mkdir -p "$install_dir"
+    curl -fsSL "$url" | tar -xz -C "$install_dir" --strip-components=1
+    ln -sf "$install_dir/bin/nvim" "$LOCAL_BIN/nvim"
+    log_install_result "nvim"
+}
+
+install_neovim
 
 install_tool_with_script uv https://astral.sh/uv/install.sh
 install_tool_with_script atuin https://setup.atuin.sh
