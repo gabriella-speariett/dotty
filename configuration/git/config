@@ -1,2 +1,24 @@
 [alias]
-  loggy = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+  actual-origin = "!git rev-parse --abbrev-ref origin/HEAD | sed 's,origin/,,'"
+
+  loggy = "!f() { \
+      current=$(git branch --show-current); \
+      base=$(git actual-origin); \
+      if [ "$current" = "$base" ]; then \
+          git log HEAD --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$@"; \
+      else \
+          git log "$base"..HEAD --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$@"; \
+      fi; \
+  }; f"
+
+  new = "!f() { \
+          set -e; \
+          branch=$1; \
+          default_branch=$(git actual-origin); \
+          git checkout $default_branch; \
+          git pull; \
+          git checkout $branch; \
+      }; f"
+    
+  getm = "!git stash && git checkout $(git actual-origin) && git pull && git checkout - && git rebase $(git actual-origin) && git stash pop"
