@@ -2,16 +2,30 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
-config.window_background_opacity = 0.8
-
 config.set_environment_variables = {
 	XDG_CONFIG_HOME = "{{ .home_root }}/configuration",
 }
 
 config.font = wezterm.font("Terminess Nerd Font Mono")
 config.font_size = 14.0
+config.color_scheme_dirs = {
+  "{{ .home_root }}/configuration/wezterm/colors",
+}
 
-config.color_scheme_dirs = { "{{ .home_root }}/configuration/wezterm/colors" }
-config.color_scheme = "laserwave-hi_c"
+local appearance = "Dark"
+if wezterm.gui then
+  appearance = wezterm.gui.get_appearance()
+end
+
+if appearance:find("Dark") then
+  config.color_scheme = "laserwave-hi_c"
+  config.window_background_opacity = 0.8
+else
+  config.color_scheme = 'BlulocoLight'
+  config.window_background_opacity = 1.0
+  config.colors = {
+    background = '#ffffff'}
+
+end
 
 return config
