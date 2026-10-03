@@ -1,0 +1,4 @@
+# Repo tooling, not dotfiles
+README.md
+justfile
+setup/
