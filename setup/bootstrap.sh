@@ -65,19 +65,28 @@ chezmoi init --apply "$REPO"
 # ── XDG Config Home ───────────────────────────────────────────────────────────
 # Set XDG_CONFIG_HOME to ~/configuration so all shells find config properly,
 # especially important for SSH/headless systems without wezterm
-cat > "$HOME/.profile" << 'EOF'
-export XDG_CONFIG_HOME="$HOME/configuration"
-EOF
+XDG_LINE='export XDG_CONFIG_HOME="$HOME/configuration"'
+if ! grep -qxF "$XDG_LINE" "$HOME/.profile" 2>/dev/null; then
+    echo "$XDG_LINE" >> "$HOME/.profile"
+fi
 
-# Also set in fish config so it's available for non wezterm fish shells
-mkdir -p "$HOME/.config/fish"
-cat > "$HOME/.config/fish/config.fish" << 'EOF'
+# Also set in fish config so it's available for non wezterm fish shells.
+# An existing file that differs is backed up rather than clobbered.
+FISH_BOOTSTRAP="$HOME/.config/fish/config.fish"
+FISH_BOOTSTRAP_CONTENT=$(cat << 'EOF'
 set -gx XDG_CONFIG_HOME "$HOME/configuration"
 
 for file in $HOME/configuration/fish/**/*.fish
     source $file
 end
 EOF
+)
+mkdir -p "$(dirname "$FISH_BOOTSTRAP")"
+if [[ -f "$FISH_BOOTSTRAP" ]] && [[ "$(cat "$FISH_BOOTSTRAP")" != "$FISH_BOOTSTRAP_CONTENT" ]]; then
+    echo "==> Backing up existing $FISH_BOOTSTRAP to $FISH_BOOTSTRAP.bak"
+    mv "$FISH_BOOTSTRAP" "$FISH_BOOTSTRAP.bak"
+fi
+echo "$FISH_BOOTSTRAP_CONTENT" > "$FISH_BOOTSTRAP"
 
 # ── just ──────────────────────────────────────────────────────────────────────
 if ! command -v just &>/dev/null; then
