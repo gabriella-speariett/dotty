@@ -28,4 +28,13 @@ else
 
 end
 
+wezterm.on("window-resized", function(window, _)
+  local overrides = window:get_config_overrides() or {}
+  local opacity = window:get_dimensions().is_full_screen and 1.0 or nil
+  if overrides.window_background_opacity ~= opacity then
+    overrides.window_background_opacity = opacity
+    window:set_config_overrides(overrides)
+  end
+end)
+
 return config
