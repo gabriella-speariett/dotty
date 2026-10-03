@@ -3,10 +3,9 @@ set -euo pipefail
 
 REPO="github.com/gabriella-speariett/dotty"
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 LOCAL_BIN="$HOME/.local/bin"
 OS_TYPE="$(uname -s)"
-
-echo $SCRIPT_DIR
 
 mkdir -p "$LOCAL_BIN"
 export PATH="$LOCAL_BIN:/opt/homebrew/bin:/usr/local/bin:$PATH"
@@ -100,7 +99,7 @@ fi
 
 # ── install tools ─────────────────────────────────────────────────────────────
 echo "==> Installing tools..."
-just --justfile "$SCRIPT_DIR/justfile" install
+just --justfile "$REPO_ROOT/justfile" install
 
 echo ""
 echo "==> Done! Restart your shell to apply all changes."
