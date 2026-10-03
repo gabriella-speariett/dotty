@@ -9,6 +9,28 @@ return {
     'lewis6991/gitsigns.nvim',
     ---@module 'gitsigns'
     ---@type Gitsigns.Config
+    init = function()
+      -- delta-style diff colours: tinted line backgrounds that keep syntax colours,
+      -- with changed words picked out by a stronger tint of the same hue
+      local function set_diff_hl()
+        local add, add_word = '#1f3536', '#266056'
+        local del, del_word = '#3c1e36', '#6a2a56'
+        for group, bg in pairs {
+          GitSignsAddLn = add,
+          GitSignsChangeLn = add,
+          GitSignsAddPreview = add,
+          GitSignsAddInline = add_word,
+          GitSignsChangeInline = add_word,
+          GitSignsDeleteVirtLn = del,
+          GitSignsDeletePreview = del,
+          GitSignsDeleteInline = del_word,
+        } do
+          vim.api.nvim_set_hl(0, group, { bg = bg })
+        end
+      end
+      set_diff_hl()
+      vim.api.nvim_create_autocmd('ColorScheme', { callback = set_diff_hl })
+    end,
     ---@diagnostic disable-next-line: missing-fields
     opts = {
       on_attach = function(bufnr)
@@ -54,6 +76,13 @@ return {
         -- Toggles
         map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
         map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
+        -- delta-style view: deleted lines inline, added lines and changed words highlighted
+        map('n', '<leader>td', function()
+          local on = not require('gitsigns.unified').is_active(bufnr)
+          gitsigns.toggle_linehl(on)
+          gitsigns.toggle_word_diff(on)
+          gitsigns.diffthis(nil, { unified = true })
+        end, { desc = '[T]oggle inline git [d]iff' })
       end,
     },
   },
