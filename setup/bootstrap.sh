@@ -45,7 +45,7 @@ for font_dir in "$SCRIPT_DIR"/fonts/*/; do
         mkdir -p "$target"
     fi
 
-    find "$font_dir" -type f -name "*.ttf" -o -name "*.otf" -exec cp -t "$target" {} +
+    find "$font_dir" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp {} "$target" \;
 
 done
 
