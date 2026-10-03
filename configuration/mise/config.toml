@@ -1,0 +1,10 @@
+# Global mise config: tools installed on Linux by setup/scripts/install-linux.sh
+# (macOS gets the same tools from setup/Brewfile)
+[tools]
+neovim = "latest"
+delta = "latest"
+tree-sitter = "latest"
+uv = "latest"
+atuin = "latest"
+starship = "latest"
+zoxide = "latest"
