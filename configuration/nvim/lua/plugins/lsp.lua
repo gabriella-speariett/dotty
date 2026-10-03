@@ -79,6 +79,7 @@ return {
       -- ts_ls = {},
 
       stylua = {}, -- Used to format Lua code
+      ty = require('lsp.ty'),
 
       -- Special Lua Config, as recommended by neovim help docs
       lua_ls = {
