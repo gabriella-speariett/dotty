@@ -7,7 +7,7 @@ if ! command -v code &>/dev/null; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
-BREWFILE="$(cd "$SCRIPT_DIR/../.." && pwd)/Brewfile"
+BREWFILE="$(cd "$SCRIPT_DIR/.." && pwd)/Brewfile"
 
 if [ ! -f "$BREWFILE" ]; then
     echo "Brewfile not found at $BREWFILE, skipping extensions."
