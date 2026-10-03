@@ -9,7 +9,7 @@ CURRENT_SHELL="$(dscl . -read /Users/$USER UserShell | awk '{print $2}')"
 if [[ "$CURRENT_SHELL" != "$FISH_LOCATION" ]]; then
     if ! grep -qx "$FISH_LOCATION" /etc/shells; then
         log_info "Fish shell not in the allowed shells, adding it..."
-        echo "$FISH_LOCATION "| sudo tee -a /etc/shells
+        echo "$FISH_LOCATION" | sudo tee -a /etc/shells
     fi
     if chsh -s "$FISH_LOCATION"; then
         log_info "Fish shell is now the default user shell!"
