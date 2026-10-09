@@ -34,9 +34,5 @@ mac:
 linux:
     @bash {{setup_dir}}/scripts/install-linux.sh
 
-# Install VS Code extensions (cross-platform)
-extensions:
-    @bash {{setup_dir}}/scripts/install-extensions.sh
-
 # Re-run install (same as install, useful for updates)
 update: install
