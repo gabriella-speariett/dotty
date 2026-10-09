@@ -25,6 +25,5 @@ return {
     local python_path = get_python_path()
     config.settings.python = config.settings.python or {}
     config.settings.python.pythonPath = python_path
-    vim.notify(python_path)
   end,
 }
