@@ -156,6 +156,10 @@ vim.o.inccommand = 'split'
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
+-- Blink the cursor in normal mode. All three times (ms) must be non-zero to blink.
+--  In a terminal only on/off is sent; the rate comes from the terminal. See `:help 'guicursor'`
+vim.opt.guicursor:append("n:blinkwait700-blinkon400-blinkoff250")
+
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
 

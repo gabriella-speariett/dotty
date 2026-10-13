@@ -20,6 +20,14 @@ end
 if appearance:find("Dark") then
   config.color_scheme = "laserwave-hi_c"
   config.window_background_opacity = 0.8
+  -- The scheme's cursor (#422B49 on #19151E) is nearly invisible, so override it
+  -- with a lighter tint of the theme's pink (#FF52BF). config.colors is layered
+  -- on top of color_scheme.
+  config.colors = {
+    cursor_bg = "#FF86D2",
+    cursor_border = "#FF86D2",
+    cursor_fg = "#19151E",
+  }
 else
   config.color_scheme = 'BlulocoLight'
   config.window_background_opacity = 1.0
