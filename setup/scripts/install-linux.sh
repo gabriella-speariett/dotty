@@ -16,7 +16,7 @@ sudo apt update -qq
 # - curl: for making HTTP requests to download files and interact with APIs.
 # - gpg: for verifying the integrity of downloaded files and adding repository keys.
 # - git: for cloning repositories and managing version control.
-# - apt-transport-https and ca-certificates: for securely fetching packages over HTTPS.
+# - ca-certificates: the trust store for verifying HTTPS connections.
 # - build-essential: for compiling software from source if needed.
 # - software-properties-common: for managing software repositories and PPAs.
 log_info "==> Installing prerequisite packages..."
@@ -24,7 +24,6 @@ sudo apt install -y -qq \
     curl \
     gpg \
     git \
-    apt-transport-https \
     ca-certificates \
     build-essential \
     software-properties-common
@@ -94,15 +93,17 @@ install_tool_with_script() {
     fi
 }
 
-for package in direnv tree ripgrep fd-find fzf bat lsd lazygit fastfetch; do
-    apt_install "$package"
-done
+# Command-line tools come from mise (below), so they match the macOS versions and
+# keep their upstream names (apt renames fd to fdfind and bat to batcat).
+# tree stays on apt because it has no prebuilt release binaries for mise to fetch.
+apt_install tree
 
 apt_install_with_repo "fish" "ppa:fish-shell/release-4"
 
 # ── mise ──────────────────────────────────────────────────────────────────────
-# Tools that aren't installed with apt (neovim, uv, starship, ...) are listed in
+# User-level command-line tools (ripgrep, fd, neovim, uv, ...) are listed in
 # configuration/mise/config.toml, which chezmoi applies as the global mise config.
+# apt keeps system-level packages: the login shell, GUI apps, compilers, certificates.
 install_tool_with_script mise https://mise.run
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/configuration}"

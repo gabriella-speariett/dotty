@@ -1,6 +1,14 @@
 # Global mise config: tools installed on Linux by setup/scripts/install-linux.sh
 # (macOS gets the same tools from setup/Brewfile)
 [tools]
+bat = "latest"
+direnv = "latest"
+fastfetch = "latest"
+fd = "latest"
+fzf = "latest"
+lazygit = "latest"
+lsd = "latest"
+ripgrep = "latest"
 neovim = "latest"
 delta = "latest"
 tree-sitter = "latest"
