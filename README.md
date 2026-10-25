@@ -4,26 +4,27 @@ Dotfiles and dev environment setup for macOS (and Ubuntu), managed with [chezmoi
 
 ## Fresh machine setup (macOS)
 
-1. Clone the repo into chezmoi's source directory. On a new Mac, `git` will prompt you to install the Xcode Command Line Tools first.
+Nothing needs to be installed first. The bootstrap script installs git and clones this repo itself.
+
+1. Run the bootstrap script straight from GitHub:
 
    ```sh
-   git clone https://github.com/gabriella-speariett/dotty ~/.local/share/chezmoi
+   bash -c "$(curl -fsSL https://raw.githubusercontent.com/gabriella-speariett/dotty/main/setup/bootstrap.sh)"
    ```
 
-2. Run the bootstrap script:
+   Use this form rather than `curl ... | bash`: piping would make the script's prompts (Homebrew, chezmoi, your password) read from the pipe instead of your keyboard.
 
-   ```sh
-   bash ~/.local/share/chezmoi/setup/bootstrap.sh
-   ```
+2. Restart your terminal (or open WezTerm).
 
-3. Restart your terminal (or open WezTerm).
+If you already have a clone, `bash ~/.local/share/chezmoi/setup/bootstrap.sh` does the same thing.
 
 The bootstrap script:
 
-- installs Homebrew if it's missing
+- installs Homebrew if it's missing, which also installs the Xcode Command Line Tools (and with them, git)
+- clones this repo into `~/.local/share/chezmoi` (chezmoi's source directory) if it isn't there yet
 - installs the Nerd Fonts in `setup/fonts/` to `~/Library/Fonts`
 - installs chezmoi and applies the dotfiles. It asks once whether this is a work machine, and the answer is saved to `~/.config/chezmoi/chezmoi.toml`.
-- points `XDG_CONFIG_HOME` at `~/configuration` by adding a line to `~/.profile` and writing `~/.config/fish/config.fish`. If a different `config.fish` already exists, it's backed up to `config.fish.bak`.
+- points `XDG_CONFIG_HOME` at `~/configuration` for interactive fish shells only, by writing `~/.config/fish/config.fish`. If a different `config.fish` already exists, it's backed up to `config.fish.bak`. It's deliberately kept out of `~/.profile` (and removed from there if an older run added it), because the desktop session reads `~/.profile` and GNOME would then look for its settings in `~/configuration`.
 - installs `just` and runs `just install`, which:
   - runs `brew bundle` with `setup/Brewfile`
   - makes fish your login shell (this asks for your password)
@@ -71,4 +72,4 @@ Files ending in `.tmpl` are chezmoi templates. `configuration/fish/conf.d/privat
 
 ## Linux (Ubuntu)
 
-Use the same steps: clone, then run `setup/bootstrap.sh`. `just install` detects Linux and runs `setup/scripts/install-linux.sh` instead of Homebrew. Tools that don't come from apt (neovim, delta, tree-sitter, uv, atuin, starship, zoxide) are installed by [mise](https://mise.jdx.dev) from `configuration/mise/config.toml`; add a line there to install another, and re-run `just update` to upgrade them.
+Run the same `bash -c "$(curl ...)"` command. On Linux the script installs `git`, `curl` and `fontconfig` with apt (asking for your sudo password) before cloning. `just install` detects Linux and runs `setup/scripts/install-linux.sh` instead of Homebrew. Tools that don't come from apt (neovim, delta, tree-sitter, uv, atuin, starship, zoxide) are installed by [mise](https://mise.jdx.dev) from `configuration/mise/config.toml`; add a line there to install another, and re-run `just update` to upgrade them.

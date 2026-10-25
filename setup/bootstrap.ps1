@@ -17,7 +17,7 @@ if (-not $wslInstalled -or -not $ubuntuInstalled) {
     Write-Host "After restarting, open Ubuntu from the Start Menu to finish setup,"
     Write-Host "then run the Linux bootstrap inside it:"
     Write-Host ""
-    Write-Host "  curl -fsSL $BOOTSTRAP_URL | bash"
+    Write-Host "  bash -c `"`$(curl -fsSL $BOOTSTRAP_URL)`""
     Write-Host ""
     $restart = Read-Host "Restart now? (y/n)"
     if ($restart -eq 'y') { Restart-Computer }
@@ -26,4 +26,6 @@ if (-not $wslInstalled -or -not $ubuntuInstalled) {
 
 # ── Run Linux bootstrap inside WSL ───────────────────────────────────────────
 Write-Host "==> Running Linux bootstrap inside Ubuntu (WSL)..."
-wsl -d Ubuntu -- bash -c "curl -fsSL $BOOTSTRAP_URL | bash"
+# Download to a file rather than piping into bash, so the script's prompts
+# (chezmoi, sudo, chsh) read from the terminal instead of from the pipe.
+wsl -d Ubuntu -- bash -c "curl -fsSL $BOOTSTRAP_URL -o /tmp/bootstrap.sh && bash /tmp/bootstrap.sh"
