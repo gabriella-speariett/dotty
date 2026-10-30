@@ -12,6 +12,9 @@
 [merge]
   conflictStyle = zdiff3
 
+[push]
+  autoSetupRemote = true
+
 [alias]
 
   actual-origin = "!git rev-parse --abbrev-ref origin/HEAD | sed 's,origin/,,'"
