@@ -36,9 +36,14 @@ else
 
 end
 
-wezterm.on("window-resized", function(window, _)
+-- Opaque when only one screen is connected (laptop only); transparent otherwise.
+wezterm.on("update-status", function(window, _)
   local overrides = window:get_config_overrides() or {}
-  local opacity = window:get_dimensions().is_full_screen and 1.0 or nil
+  local screen_count = 0
+  for _ in pairs(wezterm.gui.screens().by_name) do
+    screen_count = screen_count + 1
+  end
+  local opacity = screen_count <= 1 and 1.0 or nil
   if overrides.window_background_opacity ~= opacity then
     overrides.window_background_opacity = opacity
     window:set_config_overrides(overrides)
