@@ -19,7 +19,6 @@ end
 
 if appearance:find("Dark") then
   config.color_scheme = "laserwave-hi_c"
-  config.window_background_opacity = 0.8
   -- The scheme's cursor (#422B49 on #19151E) is nearly invisible, so override it
   -- with a lighter tint of the theme's pink (#FF52BF). config.colors is layered
   -- on top of color_scheme.
@@ -30,24 +29,9 @@ if appearance:find("Dark") then
   }
 else
   config.color_scheme = 'BlulocoLight'
-  config.window_background_opacity = 1.0
   config.colors = {
     background = '#ffffff'}
 
 end
-
--- Opaque when only one screen is connected (laptop only); transparent otherwise.
-wezterm.on("update-status", function(window, _)
-  local overrides = window:get_config_overrides() or {}
-  local screen_count = 0
-  for _ in pairs(wezterm.gui.screens().by_name) do
-    screen_count = screen_count + 1
-  end
-  local opacity = screen_count <= 1 and 1.0 or nil
-  if overrides.window_background_opacity ~= opacity then
-    overrides.window_background_opacity = opacity
-    window:set_config_overrides(overrides)
-  end
-end)
 
 return config
